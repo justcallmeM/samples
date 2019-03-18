@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="WebRTC Javascript code samples">
+        <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+        <meta itemprop="description" content="Client-side WebRTC code samples">
+        <meta itemprop="image" content="src/images/webrtc-icon-192x192.png">
+        <meta itemprop="name" content="WebRTC code samples">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta id="theme-color" name="theme-color" content="#ffffff">
+    
+        <base target="_blank">
+    
+        <title>WebRTC samples</title>
+    
+        <link rel="icon" sizes="192x192" href="src/images/webrtc-icon-192x192.png">
+        <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="src/css/main.css"/>
+        <script type="text/javascript" src="src/js/new-libs/canny.min.js"></script>
+        <script type="text/javascript" src="sticker.min.js"></script>
+    
+        <style>
+            h2 {
+                font-size: 1.5em;
+                font-weight: 500;
+            }
+    
+            h3 {
+                border-top: none;
+            }
+    
+            section {
+                border-bottom: 1px solid #eee;
+                margin: 0 0 1.5em 0;
+                padding: 0 0 1.5em 0;
+            }
+    
+            section:last-child {
+                border-bottom: none;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+<body>
+
+    <p style="text-align: center">Laboratorinis no. 4</p>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="snap">Snap Photo</button>
+    <button id="canny">Filter Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <canvas id="canvasFiltered" width="640" height="480"></canvas>
+
+<script>
+
+    // Prefer camera resolution nearest to 1280x720.
+    var constraints = { audio: true, video: { width: 640, height: 480 } }; 
+
+    navigator.mediaDevices.getUserMedia(constraints)
+    .then(function(mediaStream) {
+    var video = document.querySelector('video');
+    video.srcObject = mediaStream;
+    video.onloadedmetadata = function(e) {
+        video.play();
+    };
+    })
+    .catch(function(err) { console.log(err.name + ": " + err.message); }); // always check for errors at the end.
+
+
+    // Elements for taking the snapshot
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var video = document.getElementById('video');
+
+    // Trigger photo take
+    document.getElementById("snap").addEventListener("click", function() {
+        context.drawImage(video, 0, 0, 640, 480);
+    });
+
+    document.getElementById("canny").addEventListener("click", function(){
+        mycanvas = document.getElementById("canvasFiltered");
+        imageData = CannyJS.canny(canvas);
+        image.drawOn(mycanvas)
+    });
+
+
+
+
+</script>
+
+</body>
+</html>
